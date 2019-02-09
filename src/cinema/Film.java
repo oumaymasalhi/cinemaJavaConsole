@@ -23,7 +23,10 @@ public class Film {
         this.titre = titre;
         this.anneRealisation = anneRealisation;
         this.description = description;
-        System.out.println("--------le film est créer avec sucées--------\n");
+        System.out.println("*********************************************");
+        System.out.println("*-------le film est créer avec sucées-------*");
+        System.out.println("*********************************************\n");
+
     }
     public void afficher(){
         System.out.println(toString());
@@ -57,6 +60,22 @@ public class Film {
     }
       public void modifierAnneRealisation(String anneRealisation){
         this.anneRealisation = anneRealisation;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public void setAnneRealisation(String anneRealisation) {
+        this.anneRealisation = anneRealisation;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
       
 
