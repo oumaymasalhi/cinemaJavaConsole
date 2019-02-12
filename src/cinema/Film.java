@@ -23,9 +23,6 @@ public class Film {
         this.titre = titre;
         this.anneRealisation = anneRealisation;
         this.description = description;
-        System.out.println("*********************************************");
-        System.out.println("*-------le film est créer avec sucées-------*");
-        System.out.println("*********************************************\n");
 
     }
     public void afficher(){

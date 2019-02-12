@@ -17,6 +17,8 @@ public class Cinema {
     /**
      * @param args the command line arguments
      */
+
+    static int chifreAffaire = 0;
     public static void main(String[] args) {
 
         Cineme cinema = new Cineme();
@@ -30,49 +32,33 @@ public class Cinema {
 
             switch (choice) {
                 case 1:
-                    System.out.println("ajouter salle");
-                    System.out.println("-------------------------\n");
-                    System.out.print("Enter le numero de la salle: \n");
+                    System.out.println("\n*************** Menu Salle **************\n");
+                    System.out.print("Enter le numero de la salle: ");
                     int numSalle = sc.nextInt();
-                    System.out.println("-------------------------\n");
-                    System.out.print("Enter nombre des places : \n");
+                    System.out.print("Enter nombre des places : ");
                     int nbrPlace = sc.nextInt();
                     Salle salle = new Salle(numSalle, nbrPlace);
                     cinema.ajouterSalle(salle);
+                    System.out.println("*****************************************\n");
+
                     break; // optional
 
                 case 2:
                     cinema.menumodelFilm();
                     break; // optional
                 case 3:
-                    System.out.println("ajouter seance");
-                    System.out.println("-------------------------\n");
-                    System.out.print("Enter la date de projection: \n");
-                    String dateProjection = sc.next();
-                    System.out.println("-------------------------\n");
-                    System.out.print("Enter heure de projection : \n");
-                    String hProjection = sc.next();
-                    cinema.afficherListFilm();
-                    System.out.println("enter le numéro du film: ");
-                    int numFilm = sc.nextInt();
-                    cinema.afficherListSalle();
-                    System.out.println("enter le numéro de la salle: ");
-                    int sall = sc.nextInt();
-                    System.out.println("voud avez" + cinema.salleList.get(sall).getNbrPlace() + " place\n");
-                    System.out.println("enter le nombre de place de tarif 10DT");
-                    int nbTarif10 = sc.nextInt();
-                    cinema.salleList.get(sall).ajouterPlaceNormale(nbTarif10);
-                    System.out.println("enter le nombre de place de tarif 6DT");
-                    int nbTarif6 = sc.nextInt();
-                    cinema.salleList.get(sall).ajouterPlaceReduit(nbTarif6);
-                    cinema.salleList.get(sall).ajouterPlaceGratuit(cinema.salleList.get(sall).getNbrPlace() - nbTarif6 - nbTarif10);
+                    System.out.println("\n*************** Menu Seance **************\n");
+                    cinema.menuSeance();
+                    System.out.println("\n*****************************************\n");
 
-                    Seance sence = new Seance(dateProjection, hProjection, cinema.filmList.get(numFilm), cinema.salleList.get(sall));
-
+                    
                     break; // optional  
+                    
                 // You can have any number of case statements.
-           
-                case 4: {
+                case 4:
+                    cinema.chifreAffaire();
+                    break;
+                case 5: {
                     System.exit(0);
                 }
                 break; // optional 
