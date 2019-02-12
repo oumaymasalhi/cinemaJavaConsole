@@ -87,10 +87,7 @@ public class Seance {
             this.placeReduit = placeReduit;
             nbrPlaceAcheter += placeReduit;
             ca += 6 * placeReduit;
-            System.out.println(ca);
-            System.out.println(placeReduit);
-            System.out.println(nbrPlace);
-
+     
         } else {
             System.out.println("vous pouvez pas ajouter ce nombre vous atteinz le nombre maximal des place ");
         }
