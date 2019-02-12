@@ -6,6 +6,7 @@
 package cinema;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -26,19 +27,14 @@ public class Cinema {
         System.out.println("------------------------------------");
         System.out.println("-----Oummayma && Hassan cinéma------");
         System.out.println("------------------------------------\n\n");
-
+try{
         do {
             int choice = cinema.afficheMenu();
 
             switch (choice) {
                 case 1:
                     System.out.println("\n*************** Menu Salle **************\n");
-                    System.out.print("Enter le numero de la salle: ");
-                    int numSalle = sc.nextInt();
-                    System.out.print("Enter nombre des places : ");
-                    int nbrPlace = sc.nextInt();
-                    Salle salle = new Salle(numSalle, nbrPlace);
-                    cinema.ajouterSalle(salle);
+                    cinema.menuSalle();
                     System.out.println("*****************************************\n");
 
                     break; // optional
@@ -66,7 +62,10 @@ public class Cinema {
                 // Statements
             }
         } while (true);
-
+ }catch(InputMismatchException e){
+            System.err.println("invalid nombre");
+        }
     }
+  
 
 }

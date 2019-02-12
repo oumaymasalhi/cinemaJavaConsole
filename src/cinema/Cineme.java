@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  * @author family
  */
-public class Cineme {
+public class Cineme implements ICinema{
 
     ArrayList<Salle> salleList = new ArrayList<Salle>();
     ArrayList<Film> filmList = new ArrayList<Film>();
@@ -98,32 +98,32 @@ public class Cineme {
 
     }
 
-    public void afficherListFilm() {
-        int j = 0;
-        if (filmList.size() > 0) {
-            System.out.println("\n------- La liste des films est la suivante: ----\n");
-
-            while (filmList.size() > j) {
-                System.out.print(j + ") ");
-                filmList.get(j).afficher();
-                j++;
-            }
+    public void afficherListFilm() throws ListVideException {
+        if (filmList.size() == 0) {
+            throw new ListVideException("la liste des films est vide");
         } else {
-            System.out.println("\nVous n'avez pas encore des films! merci d'ajouter un film");
+            int j = 0;          
+                System.out.println("\n------- La liste des films est la suivante: ----\n");
+                while (filmList.size() > j) {
+                    System.out.print(j + ") ");
+                    filmList.get(j).afficher();
+                    j++;
+                }
+           
         }
     }
 
-    public void afficherListSalle() {
-        int j = 0;
-        if (salleList.size() > 0) {
-            while (salleList.size() > j) {
-                System.out.println(j + ") " + salleList.get(j).toString());
-                j++;
-            }
+    public void afficherListSalle() throws ListVideException {
+        if (salleList.size() == 0) {
+            throw new ListVideException("la liste des salle est vide");
         } else {
-            System.out.println("vous n'avez pas encore des salles pour cette cinéma! merci d'ajouter une salle");
+            int j = 0;
+                while (salleList.size() > j) {
+                    System.out.println(j + ") " + salleList.get(j).toString());
+                    j++;
+                }
+          
         }
-
     }
 
     public void rechercherUnFilm() {
@@ -138,13 +138,25 @@ public class Cineme {
             int rechere = sc.nextInt();
             switch (rechere) {
                 case 1:
-                    rechercherUnFilmByTitre();
+                    try {
+                        rechercherUnFilmByTitre();
+                    } catch (Existe e) {
+                        System.out.println(e);
+                    }
                     break;
                 case 2:
-                    rechercherUnFilmById();
+                    try {
+                        rechercherUnFilmById();
+                    } catch (Existe e) {
+                        System.out.println(e);
+                    }
                     break;
                 case 3:
-                    rechercherUnFilmByDate();
+                    try {
+                        rechercherUnFilmByDate();
+                    } catch (Existe e) {
+                        System.out.println(e);
+                    }
                     break;
 
                 case 4:
@@ -159,51 +171,53 @@ public class Cineme {
         }
     }
 
-    public void rechercherUnFilmByTitre() {
+    public void rechercherUnFilmByTitre() throws Existe {
         int j = 0;
         System.out.print("entrer le titre du film ");
         String titre = sc.next();
         while (filmList.size() > j) {
-            if (filmList.get(j).getTitre().equals(titre)) {
+            if (!filmList.get(j).getTitre().equals(titre)) {
+                throw new Existe("le film que vous avez rechercher n'exite pas");
+
+            } else {
                 System.out.print("le filme recherché est le suivant : ");
                 filmList.get(j).afficher();
-                return;
-            } else {
-                System.out.println("le film n'existe pas");
+
             }
             j++;
         }
 
     }
 
-    public void rechercherUnFilmById() {
+    public void rechercherUnFilmById() throws Existe {
         int j = 0;
         System.out.print("entrer le identifiant du film ");
         int id = sc.nextInt();
         while (filmList.size() > j) {
-            if (filmList.get(j).getId() == id) {
+            if (filmList.get(j).getId() != id) {
+                throw new Existe("le film que vous avez rechercher n'existe pas");
+
+            } else {
                 System.out.print("le filme recherché est le suivant : ");
                 filmList.get(j).afficher();
-                return;
-            } else {
-                System.out.println("le film n'existe pas");
+
             }
 
             j++;
         }
     }
 
-    public void rechercherUnFilmByDate() {
+    public void rechercherUnFilmByDate() throws Existe {
         int j = 0;
         System.out.print("entrer le identifiant du film ");
         String date = sc.next();
         while (filmList.size() > j) {
-            if (filmList.get(j).getAnneRealisation().equals(date)) {
+            if (!filmList.get(j).getAnneRealisation().equals(date)) {
+                throw new Existe("le film que vous avez n'existe pas ");
+
+            } else {
                 System.out.print("le filme recherché est le suivant : ");
                 filmList.get(j).afficher();
-                return;
-            } else {
-                System.out.println("le film n'existe pas");
             }
 
             j++;
@@ -220,7 +234,7 @@ public class Cineme {
         int supC = sc.nextInt();
         switch (supC) {
             case 1:
-                System.out.print("anter le nouveau titre ");
+                System.out.print("enter le nouveau titre ");
                 String titre = sc.next();
                 filmList.get(j).setTitre(titre);
                 System.out.println("le titre du film est modifié avec succés");
@@ -246,55 +260,107 @@ public class Cineme {
         }
     }
 
-    public void modifierFilm() {
-        int j = 0;
-        System.out.print("entrer le identifiant du film ");
-        int id = sc.nextInt();
-        while (filmList.size() > j) {
-            if (filmList.get(j).getId() == id) {
-                System.out.println("le filme est existé");
-                modifBy(j);
-                return;
-            } else {
-                System.out.println("le film n'existe pas");
-            }
+    public void modifierFilm() throws Existe, ListVideException {
+        if (filmList.size() == 0) {
+            throw new ListVideException("list des films est vide");
+        } else {
+            int j = 0;
+            System.out.print("entrer le identifiant du film ");
+            int id = sc.nextInt();
+            while (filmList.size() > j) {
+                if (filmList.get(j).getId() != id) {
+                    throw new Existe("le film n'exite pas");
 
-            j++;
+                } else {
+                    System.out.println("le filme est existé");
+                    modifBy(j);
+                }
+
+                j++;
+            }
         }
     }
 
-    public void supprimerFilm() {
-        int j = 0;
-        System.out.print("entrer le identifiant du film ");
-        int id = sc.nextInt();
-        while (filmList.size() > j) {
-            if (filmList.get(j).getId() == id) {
-                System.out.println("le film est existé avec succée : ");
-                filmList.remove(j);
-                System.out.println("le film est supprimé avec succée : ");
-                afficherListFilm();
-                return;
-            } else {
-                System.out.println("le film n'existe pas");
-            }
+    public void supprimerFilm() throws ListVideException {
+        if (filmList.size() == 0) {
+            throw new ListVideException("la liste des films est vide");
+        } else {
+            int j = 0;
+            System.out.print("entrer le identifiant du film ");
+            int id = sc.nextInt();
+            while (filmList.size() > j) {
+                if (filmList.get(j).getId() == id) {
+                    filmList.remove(j);
+                    System.out.println("le film est supprimé avec succée : ");
+                    afficherListFilm();
+                    return;
+                } else {
+                    System.out.println("le film n'existe pas");
+                }
 
-            j++;
+                j++;
+            }
         }
     }
 
-    public void menuSeance() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\n*************** Menu Seance **************\n");
-        System.out.println("cliquer sur 1 pour ajouter une seance");
-        System.out.println("cliquer sur 2 pour afficher la liste des seance");
+    public void supprimerSeance() throws ListVideException {
+        if (seanceList.size() == 0) {
+            throw new ListVideException("la liste des seances est vide");
+        } else {
+            System.out.print("entrer l'index de la seance ");
+            int id = sc.nextInt();
+            seanceList.remove(id);
+            System.out.print("La seance est suprimée avec succées");
+
+        }
+
+    }
+
+    public void supprimerSalle() throws ListVideException {
+        if (salleList.size() == 0) {
+            throw new ListVideException(" la liste des salles est vide ");
+        } else {
+            System.out.print("entrer l'index de la salle ");
+            int id = sc.nextInt();
+            salleList.remove(id);
+            System.out.println("La salle est supromée avec succées");
+        }
+
+    }
+
+    public void ajouterSalle() {
+        System.out.print("Enter le numero de la salle: ");
+        int numSalle = sc.nextInt();
+        System.out.print("Enter nombre des places : ");
+        int nbrPlace = sc.nextInt();
+        Salle salle = new Salle(numSalle, nbrPlace);
+        ajouterSalle(salle);
+    }
+
+    public void menuSalle() {
+
+        System.out.println("cliquer sur 1 pour ajouter une salle");
+        System.out.println("cliquer sur 2 pour afficher la liste des salles");
+        System.out.println("cliquer sur 3 pour supprime une salle");
         System.out.println("cliquer sur any key pour annuler");
         int seancechoice = sc.nextInt();
         switch (seancechoice) {
             case 1:
-                ajouterSeance();
+                ajouterSalle();
                 break;
             case 2:
-                afficherlistSeance();
+                try {
+                    afficherListSalle();
+                } catch (ListVideException e) {
+                    System.out.println(e);
+                }
+                break;
+            case 3:
+                try {
+                    supprimerSalle();
+                } catch (ListVideException e) {
+                    System.out.println(e);
+                }
                 break;
             default:
                 break;// Optional
@@ -302,16 +368,48 @@ public class Cineme {
 
     }
 
-    public void afficherlistSeance() {
+    public void menuSeance() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("cliquer sur 1 pour ajouter une seance");
+        System.out.println("cliquer sur 2 pour afficher la liste des seances");
+        System.out.println("cliquer sur 3 pour supprime une seance");
+        System.out.println("cliquer sur any key pour annuler");
+        int seancechoice = sc.nextInt();
+        switch (seancechoice) {
+            case 1:
+                ajouterSeance();
+                break;
+            case 2:
+                try{
+                afficherlistSeance();
+                } catch (ListVideException e) {
+                    System.out.println(e);
+                }
+                break;
+            case 3:
+                try {
+                    supprimerSeance();
+                } catch (ListVideException e) {
+                    System.out.println(e);
+                }
+                break;
+            default:
+                break;// Optional
+        }
+
+    }
+
+    public void afficherlistSeance() throws ListVideException{
+        if(seanceList.size() == 0){
+            throw new ListVideException("la liste des seance est vide");
+        }else{
         int j = 0;
-        if (seanceList.size() > 0) {
             while (seanceList.size() > j) {
                 System.out.println(j + ") " + seanceList.get(j).toString());
                 j++;
             }
-        } else {
-            System.out.println("vous n'avez pas encore des seance pour cette cinéma! merci d'ajouter une salle");
-        }
+        } 
+    
     }
 
     public void ajouterSeance() {
@@ -320,13 +418,7 @@ public class Cineme {
         System.out.println("-------------------------\n");
         System.out.print("Enter heure de projection : \n");
         String hProjection = sc.next();
-        if (filmList.size() == 0) {
-            System.out.println("vous n'avez pas pas encore des film merci d'ajouter un film");
-            return;
-        } else if (salleList.size() == 0) {
-            System.out.println("vous n'avez pas pas encore des sales merci d'ajouter une salle");
-            return;
-        } else {
+      try{
             afficherListFilm();
             System.out.print("enter l'index du film: ");
             int numFilm = sc.nextInt();
@@ -343,7 +435,9 @@ public class Cineme {
             seance.ajouterPlaceReduit(nbTarif6, salleList.get(sall).getNbrPlace());
             seance.ajouterPlaceGratuit(salleList.get(sall).getNbrPlace());
             ajouterSeance(seance);
-        }
+        } catch (ListVideException e) {
+                    System.out.println(e);
+                }
     }
 
     public void menumodelFilm() {
@@ -362,16 +456,30 @@ public class Cineme {
                 ajouterFilm();
                 break;
             case 2:
-                supprimerFilm();
+                try {
+                    supprimerFilm();
+                } catch (ListVideException e) {
+                    System.out.println(e);
+                }
                 break;
             case 3:
                 rechercherUnFilm();
                 break;
             case 4:
-                afficherListFilm();
+
+                try {
+                    afficherListFilm();
+                } catch (ListVideException e) {
+                    System.out.println(e);
+                }
                 break;
             case 5:
-                modifierFilm();
+                try {
+                    modifierFilm();
+                } catch (Existe | ListVideException e) {
+                    System.out.println(e);
+                }
+
                 break;// optional  
             // You can have any number of case statements.
             default:

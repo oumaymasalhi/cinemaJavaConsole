@@ -5,15 +5,10 @@
  */
 package cinema;
 
-import java.util.InputMismatchException;
-
 /**
  *
  * @author family
  */
-public class IntException extends InputMismatchException{
-
-    public IntException() {
-        super("invalid nombre");
-    } 
+public interface ICinema {
+    
 }
