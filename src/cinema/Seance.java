@@ -9,7 +9,7 @@ package cinema;
  *
  * @author family
  */
-public class Seance {
+public class Seance implements Tarif{
 
     private String dateProjection;
     private String heureProjection;
@@ -68,13 +68,13 @@ public class Seance {
         this.salle = salle;
     }
 
-    public void ajouterPlaceNormale(int placeNormale, int nbrPlace) {
+    public void ajouterPlaceNormale(int placeNormale, int nbrPlace) throws MaxPlaceExecption{
         if (placeNormale + placeGratuit + placeReduit <= nbrPlace) {
             this.placeNormale = placeNormale;
             nbrPlaceAcheter += placeNormale;
-            ca += 10 * placeNormale;
+            ca += Tarif.normale * placeNormale;
         } else {
-            System.out.println("vous pouvez pas ajouter ce nombre vous atteinz le nombre maximal des place ");
+            throw new MaxPlaceExecption(nbrPlace);
         }
     }
 
@@ -82,14 +82,14 @@ public class Seance {
             placeGratuit = nbrPlace -(placeNormale+ placeReduit);
     }
 
-    public void ajouterPlaceReduit(int placeReduit, int nbrPlace) {
+    public void ajouterPlaceReduit(int placeReduit, int nbrPlace)throws MaxPlaceExecption {
         if (placeNormale + placeGratuit + placeReduit <= nbrPlace) {
             this.placeReduit = placeReduit;
             nbrPlaceAcheter += placeReduit;
-            ca += 6 * placeReduit;
+            ca += Tarif.reduit * placeReduit;
      
         } else {
-            System.out.println("vous pouvez pas ajouter ce nombre vous atteinz le nombre maximal des place ");
+            throw new MaxPlaceExecption(nbrPlace);
         }
 
     }

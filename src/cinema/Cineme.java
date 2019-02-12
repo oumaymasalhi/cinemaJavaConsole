@@ -12,7 +12,7 @@ import java.util.Scanner;
  *
  * @author family
  */
-public class Cineme implements ICinema{
+public class Cineme{
 
     ArrayList<Salle> salleList = new ArrayList<Salle>();
     ArrayList<Film> filmList = new ArrayList<Film>();
@@ -415,15 +415,18 @@ public class Cineme implements ICinema{
     public void ajouterSeance() {
         System.out.print("Enter la date de projection: \n");
         String dateProjection = sc.next();
-        System.out.println("-------------------------\n");
         System.out.print("Enter heure de projection : \n");
         String hProjection = sc.next();
       try{
+           System.out.println("------------Liste des films---------- ");
             afficherListFilm();
+           System.out.println("------------------------------------- ");
             System.out.print("enter l'index du film: ");
             int numFilm = sc.nextInt();
+            System.out.println("------------Liste des salles---------- ");
             afficherListSalle();
-            System.out.println("enter l'index de la salle: ");
+           System.out.println("------------------------------------- "); 
+            System.out.print("enter l'index de la salle: ");
             int sall = sc.nextInt();
             System.out.println("voud avez" + salleList.get(sall).getNbrPlace() + " place\n");
             Seance seance = new Seance(dateProjection, hProjection, filmList.get(numFilm), salleList.get(sall));
@@ -435,7 +438,7 @@ public class Cineme implements ICinema{
             seance.ajouterPlaceReduit(nbTarif6, salleList.get(sall).getNbrPlace());
             seance.ajouterPlaceGratuit(salleList.get(sall).getNbrPlace());
             ajouterSeance(seance);
-        } catch (ListVideException e) {
+        } catch (ListVideException | MaxPlaceExecption e) {
                     System.out.println(e);
                 }
     }
